@@ -2,10 +2,9 @@ package app
 
 import kotlin.test.Test
 
-class MainKtTest {
+class MainTest {
   @Test
   fun `best test ever`() {
     assert(true)
   }
-
 }

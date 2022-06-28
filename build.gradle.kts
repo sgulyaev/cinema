@@ -2,11 +2,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
   kotlin("jvm") version "1.7.0"
-  application
 }
 
-group = "org.example"
-version = "1.0-SNAPSHOT"
 
 repositories {
   mavenCentral()
@@ -24,9 +21,27 @@ tasks.test {
 }
 
 tasks.withType<KotlinCompile> {
-  kotlinOptions.jvmTarget = "1.8"
+  kotlinOptions {
+    jvmTarget = "11"
+    javaParameters = true
+  }
 }
 
-application {
-  mainClass.set("MainKt")
+
+tasks.register<Sync>("deps") {
+  into("$buildDir/libs/deps")
+  from(configurations.runtimeClasspath)
+}
+
+tasks.jar {
+  dependsOn("deps")
+  archiveBaseName.set("app")
+  doFirst {
+    manifest {
+      attributes(
+        "Main-Class" to "app.MainKt",
+        "Class-Path" to File("$buildDir/libs/deps").listFiles()?.joinToString(" ") { "deps/${it.name}"}
+      )
+    }
+  }
 }

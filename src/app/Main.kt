@@ -1,5 +1,8 @@
 package app
 
-fun main(args: Array<String>) {
-
+fun main() {
+  while (true) {
+    println("hello world")
+    Thread.sleep(1000)
+  }
 }
