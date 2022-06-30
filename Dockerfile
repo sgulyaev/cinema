@@ -28,3 +28,8 @@ USER user
 
 ENV JAVA_OPTS="-Xmx330m -Xss512k"
 CMD java $JAVA_OPTS -jar app.jar
+
+ENV PORT=8080
+EXPOSE $PORT
+
+HEALTHCHECK CMD wget --no-verbose --tries=1 --spider http://localhost:$PORT/api/health || exit 1
