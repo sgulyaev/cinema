@@ -15,20 +15,26 @@ dependencies {
   implementation("io.ktor:ktor-server-netty:2.0.2")
   implementation("io.ktor:ktor-server-content-negotiation:2.0.2")
   implementation("io.ktor:ktor-serialization-kotlinx-json:2.0.2")
+  implementation("io.ktor:ktor-server-status-pages:2.0.2")
 
   implementation("ch.qos.logback:logback-classic:1.2.11")
   implementation("org.slf4j:jul-to-slf4j:1.7.36")
 
   testImplementation("io.ktor:ktor-server-test-host:2.0.2")
   testImplementation("io.ktor:ktor-server-tests-jvm:2.0.2")
+  testImplementation("io.ktor:ktor-client-content-negotiation:2.0.2")
   testImplementation(kotlin("test"))
+  testImplementation("io.mockk:mockk:1.12.4")
 }
 
 sourceSets.main {
   java.srcDirs("src")
   resources.srcDirs("src/resources")
 }
-sourceSets.test { java.srcDirs("test") }
+sourceSets.test {
+  java.srcDirs("test")
+  resources.srcDirs("test/resources")
+}
 
 tasks.test {
   useJUnitPlatform()
@@ -54,7 +60,7 @@ tasks.jar {
     manifest {
       attributes(
         "Main-Class" to "app.MainKt",
-        "Class-Path" to File("$buildDir/libs/deps").listFiles()?.joinToString(" ") { "deps/${it.name}"}
+        "Class-Path" to File("$buildDir/libs/deps").listFiles()?.joinToString(" ") { "deps/${it.name}" }
       )
     }
   }

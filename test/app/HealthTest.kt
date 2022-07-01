@@ -8,7 +8,7 @@ import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
-class MainTest {
+class HealthTest {
   @Test
   fun `health check`() = testApplication {
     val response = client.get("/api/health")
