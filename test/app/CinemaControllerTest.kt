@@ -14,7 +14,7 @@ import kotlin.test.assertEquals
 
 class CinemaControllerTest {
   lateinit var testClient: HttpClient
-  val cinema = mockk<CinemaRepository> (relaxed = true)
+  val cinema = mockk<CinemaRepository>(relaxed = true)
   val controller = CinemaController(cinema)
 
   @Test

@@ -4,7 +4,25 @@ services:
   app:
     restart: always
     build: .
+    environment:
+      DB_HOST: db
+    depends_on:
+      - db
     ports:
       - "127.0.0.1:8888:8080"
+
+  db:
+    restart: always
+    image: postgres:13-alpine
+    volumes:
+      - ./test/db/postgres-init:/docker-entrypoint-initdb.d
+      - data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+      POSTGRES_MULTIPLE_DATABASES: app_test
+    ports:
+      - "127.0.0.1:65432:5432"
+
 volumes:
   data:

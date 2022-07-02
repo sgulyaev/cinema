@@ -7,12 +7,13 @@ import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
 
 interface Controller {
-  val installInto: Routing.() -> Unit
+  fun installInto(routing: Routing)
 }
+
 fun Routing.addController(controller: Controller): Unit = controller.installInto(this)
 
 class CinemaController(private val cinema: CinemaRepository) : Controller {
-  override val installInto: Routing.() -> Unit = {
+  override fun installInto(routing: Routing): Unit = routing.run {
     get("/api/seats") {
       call.respondText("get-seats")
     }

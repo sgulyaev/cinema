@@ -20,6 +20,10 @@ dependencies {
   implementation("ch.qos.logback:logback-classic:1.2.11")
   implementation("org.slf4j:jul-to-slf4j:1.7.36")
 
+  implementation("com.zaxxer:HikariCP:5.0.1")
+  implementation("org.liquibase:liquibase-core:4.11.0")
+  implementation("org.postgresql:postgresql:42.3.6")
+
   testImplementation("io.ktor:ktor-server-test-host:2.0.2")
   testImplementation("io.ktor:ktor-server-tests-jvm:2.0.2")
   testImplementation("io.ktor:ktor-client-content-negotiation:2.0.2")
@@ -29,11 +33,11 @@ dependencies {
 
 sourceSets.main {
   java.srcDirs("src")
-  resources.srcDirs("src/resources")
+  resources.srcDirs("src").exclude("**/*.kt")
 }
 sourceSets.test {
   java.srcDirs("test")
-  resources.srcDirs("test/resources")
+  resources.srcDirs("test").exclude("**/*.kt")
 }
 
 tasks.test {
