@@ -1,6 +1,8 @@
 package app
 
 import db.DBModule
+import db.Plugin
+import di.DI
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
@@ -16,10 +18,11 @@ fun main(args: Array<String>) {
 
 @Suppress("unused")
 fun Application.main() {
-  install(DBModule(if (System.getProperty("app.env") == "prod") "" else "_test").plugin)
+  val di = DI()
+  install(DBModule(if (System.getProperty("app.env") == "prod") "" else "_test").Plugin(di))
 
   routing {
-    addController(CinemaController(CinemaRepository()))
+    addController(di.require<CinemaController>())
   }
 }
 

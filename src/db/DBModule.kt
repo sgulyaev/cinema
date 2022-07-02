@@ -2,6 +2,7 @@ package db
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import di.DI
 import io.ktor.server.application.*
 import io.ktor.server.application.hooks.*
 import liquibase.Liquibase
@@ -12,7 +13,6 @@ import javax.sql.DataSource
 
 class DBModule(private val suffix: String = "_test") {
   companion object {
-    lateinit var db: HikariDataSource
     private const val dbName = "app"
   }
 
@@ -24,15 +24,13 @@ class DBModule(private val suffix: String = "_test") {
   ).also {
     it.migrate(if (suffix == "_test") listOf("test", "test-data") else listOf("prod"))
   }
+}
 
-
-  val plugin: ApplicationPlugin<Any> by lazy {
-    createApplicationPlugin("DB") {
-      val hikariDataSource = createDataSource()
-      db = hikariDataSource // should be some kind of DI here.
-      on(MonitoringEvent(ApplicationStopped)) { db.close() }
-    }
-  }
+@Suppress("FunctionName")
+fun DBModule.Plugin(di: DI): ApplicationPlugin<Any> = createApplicationPlugin("DB") {
+  createDataSource()
+      .also { hikariDataSource -> di.provide<DataSource>(hikariDataSource) }
+      .also { hikariDataSource -> on(MonitoringEvent(ApplicationStopped)) { hikariDataSource.close() } }
 }
 
 

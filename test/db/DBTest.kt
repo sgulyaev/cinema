@@ -1,10 +1,13 @@
 package db
 
+import com.zaxxer.hikari.HikariDataSource
 import com.zaxxer.hikari.pool.HikariPool
+import di.DI
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import org.junit.jupiter.api.AfterAll
+import javax.sql.DataSource
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -35,14 +38,17 @@ class DbModuleTest : DBTest() {
   }
 
   @Test
-  fun `if installed as plugin should close datasource when application stopped`() {
+  fun `if installed as plugin should provide datasource to DI and close datasource when application stopped`() {
+    val di = DI()
     val server = embeddedServer(Netty, 0) {
-      install(DBModule("_test").plugin)
+      install(DBModule("_test").Plugin(di))
     }.start()
-    assertFalse(DBModule.db.isClosed)
+
+    val hikariDataSource = di.require<DataSource>() as HikariDataSource
+    assertFalse(hikariDataSource.isClosed)
 
     server.stop()
-    assertTrue(DBModule.db.isClosed)
+    assertTrue(hikariDataSource.isClosed)
   }
 }
 

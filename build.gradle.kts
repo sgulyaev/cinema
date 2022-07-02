@@ -29,6 +29,7 @@ dependencies {
   testImplementation("io.ktor:ktor-client-content-negotiation:2.0.2")
   testImplementation(kotlin("test"))
   testImplementation("io.mockk:mockk:1.12.4")
+  testImplementation("org.assertj:assertj-core:3.23.1")
 }
 
 sourceSets.main {

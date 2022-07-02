@@ -5,6 +5,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
+import javax.sql.DataSource
 
 interface Controller {
   fun installInto(routing: Routing)
@@ -28,7 +29,7 @@ class CinemaController(private val cinema: CinemaRepository) : Controller {
 @Serializable
 data class Seat(val id: Int)
 
-class CinemaRepository {
+class CinemaRepository(val db: DataSource) {
   private val seats = (1..100).map { Seat(it) }.toSet()
 
   fun book(seats: Set<Seat>) {
