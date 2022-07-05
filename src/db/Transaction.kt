@@ -37,7 +37,9 @@ fun <R> DataSource.transaction(block: Transaction.() -> R): R {
 
   val topLevel = Transaction(this).attach()
   return try {
-    topLevel.block()
+    val result = topLevel.block()
+    topLevel.close(commit = true)
+    result
   } catch (e: Throwable) {
     topLevel.close(commit = false)
     throw e

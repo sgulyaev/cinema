@@ -1,5 +1,7 @@
 package app
 
+import app.cinema.CinemaController
+import app.cinema.addController
 import db.DBModule
 import db.Plugin
 import di.DI

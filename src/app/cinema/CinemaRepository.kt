@@ -1,35 +1,13 @@
-package app
+package app.cinema
 
 import db.exec
 import db.select
-import io.ktor.server.application.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
-import kotlinx.serialization.Serializable
 import java.sql.ResultSet
 import javax.sql.DataSource
 
-interface Controller {
-  fun installInto(routing: Routing)
+data class Seat(val id: Int, val owner: String? = null) {
+  val isFree get() = owner == null
 }
-
-fun Routing.addController(controller: Controller): Unit = controller.installInto(this)
-
-class CinemaController(private val cinema: CinemaRepository) : Controller {
-  override fun installInto(routing: Routing): Unit = routing.run {
-    get("/api/seats") {
-      call.respondText("get-seats")
-    }
-    put("/api/seats") {
-      val seats = call.receive<Set<Seat>>()
-      call.respondText("put-seats[${seats.joinToString(",") { it.id.toString() }}]")
-    }
-  }
-}
-
-@Serializable
-data class Seat(val id: Int, val owner: String? = null)
 
 class CinemaRepository(val db: DataSource, private val table: String = "seats") {
   private val mapper: ResultSet.() -> Seat = { Seat(getInt(1), getString(2)) }
@@ -47,6 +25,13 @@ class CinemaRepository(val db: DataSource, private val table: String = "seats") 
   fun changeOwnerFor(ids: List<Int>, owner: String?) {
     if (ids.isEmpty()) return
     val whereExpr = "where id in (${ids.joinToString(",") { "?" }})"
-    db.exec("update seats set owner = ? $whereExpr", listOf(owner) + ids)
+    db.exec("update $table set owner = ? $whereExpr", listOf(owner) + ids)
+  }
+
+  fun reset(size: Int) {
+    db.exec("delete from $table")
+    val values = (1..size).joinToString(",") { "(?)" }
+    db.exec("insert into $table (id) values $values", (1..size).toList())
   }
 }
+

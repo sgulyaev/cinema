@@ -1,4 +1,4 @@
-package app
+package app.cinema
 
 import db.DBTest
 import kotlin.test.Test
@@ -35,5 +35,14 @@ class CinemaRepositoryTest : DBTest() {
   fun `change owner`() {
     cinema.changeOwnerFor(listOf(3, 4, 6), "sg")
     assertEquals(setOf(3, 4, 6), cinema.getAll().filter { it.owner == "sg" }.map { it.id }.toSet())
+  }
+
+  @Test
+  fun `reset with needed seats count`() {
+    cinema.changeOwnerFor(listOf(3, 4, 6), "sg")
+    cinema.reset(15)
+    val seats = cinema.getAll()
+    assertEquals(15, seats.size)
+    assertTrue(seats.all { it.owner == null })
   }
 }

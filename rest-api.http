@@ -1,0 +1,29 @@
+GET http://localhost:8080/api/seats
+
+###
+
+PUT http://localhost:8080/api/seats
+Content-Type: application/json
+
+{"ids": [4, 5, 6], "owner": "owner1"}
+
+###
+
+POST http://localhost:8080/api/seats/reset?size=10
+
+###
+
+
+// when started in docker
+GET http://localhost:8888/api/seats
+
+###
+
+PUT http://localhost:8888/api/seats
+Content-Type: application/json
+
+###
+
+POST http://localhost:8888/api/seats/reset?size=6
+
+###
