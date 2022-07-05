@@ -7,12 +7,12 @@
 
     <changeSet id="seats" author="sg">
         <createTable tableName="seats">
-            <column name="id" type="smallint"/>
-            <column name="ownerId" type="varchar(255)"><constraints nullable="true"/></column>
+            <column name="id" type="smallint"><constraints primaryKey="true"/></column>
+            <column name="owner" type="varchar(255)"><constraints nullable="true"/></column>
         </createTable>
 
-        <createIndex tableName="seats" indexName="owner_id">
-            <column name="ownerId"/>
+        <createIndex tableName="seats" indexName="seats_id">
+            <column name="id"/>
         </createIndex>
     </changeSet>
 

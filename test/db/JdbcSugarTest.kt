@@ -22,7 +22,7 @@ class JdbcSugarTest : DBTest() {
   @Test
   fun `basic queries`() {
     assertEquals(0, db.select("select count(*) from $table") { getInt(1) }.first())
-    db.exec("insert into $table values (?), (?)", sequenceOf(1, 2))
+    db.exec("insert into $table values (?), (?)", listOf(1, 2))
     assertEquals(2, db.select("select count(*) from $table") { getInt(1) }.first())
   }
 }
