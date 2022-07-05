@@ -3,6 +3,9 @@
 ---
 ## Inspired by kotlin-jooby-svelte-template from codeborne
 
+## Start 
+    git clone https://github.com/sgulyaev/cinema.git --config core.autocrlf=input
+ 
 
 ## Running in Docker
 `docker-compose up --build`
