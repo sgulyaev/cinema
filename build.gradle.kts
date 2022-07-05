@@ -16,6 +16,7 @@ dependencies {
   implementation("io.ktor:ktor-server-content-negotiation:2.0.2")
   implementation("io.ktor:ktor-serialization-kotlinx-json:2.0.2")
   implementation("io.ktor:ktor-server-status-pages:2.0.2")
+  implementation("io.ktor:ktor-server-call-logging:2.0.2")
 
   implementation("ch.qos.logback:logback-classic:1.2.11")
   implementation("org.slf4j:jul-to-slf4j:1.7.36")
