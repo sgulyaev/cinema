@@ -9,6 +9,8 @@ class Transaction(private val db: DataSource) {
     fun current(): Transaction? = threadLocal.get()
   }
 
+  var needRollback: Boolean = false
+
   private var conn: Connection? = null
 
   val connection: Connection
@@ -38,7 +40,7 @@ fun <R> DataSource.transaction(block: Transaction.() -> R): R {
   val topLevel = Transaction(this).attach()
   return try {
     val result = topLevel.block()
-    topLevel.close(commit = true)
+    topLevel.close(commit = !topLevel.needRollback)
     result
   } catch (e: Throwable) {
     topLevel.close(commit = false)

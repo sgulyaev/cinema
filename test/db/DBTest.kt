@@ -43,7 +43,7 @@ abstract class DBTest {
     }
 
     override fun afterEach(context: ExtensionContext?) {
-      Transaction.current()!!.close(commit = false)
+      Transaction.current()?.close(commit = false)
     }
   }
 }
